@@ -125,7 +125,7 @@ const Login = () => {
               </label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-5 text-gray-400" />
-                <input
+                <input 
                   id="password"
                   name="password"
                   type="password"
