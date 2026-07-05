@@ -27,7 +27,11 @@ const Banner = () => {
                 <span>Fast and reliable shipping</span>
             </div>
               </div>
-              <button onClick={dismissBanner} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/10 rounded-full">
+              <button
+                onClick={dismissBanner}
+                aria-label="Dismiss banner"
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/10 rounded-full"
+              >
                 <XIcon className="size-3.5"/>
               </button>
             </div>
