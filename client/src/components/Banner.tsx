@@ -1,43 +1,48 @@
-import { TruckIcon, ZapIcon, XIcon } from "lucide-react"
-import { useState } from "react"
+import { TruckIcon, ZapIcon, XIcon } from "lucide-react";
+import { useState } from "react";
 
 const Banner = () => {
+  const [bannerVisible, setBannerVisible] = useState(() => {
+    return sessionStorage.getItem("banner_dismissed") !== "true";
+  });
 
-    const [bannerVisible, setBannerVisible] = useState(() =>{
-        return sessionStorage.getItem('banner_dismissed') !== 'true'
-    })
-
-    const dismissBanner = () => {
-        sessionStorage.setItem('banner_dismissed', 'true')
-        setBannerVisible(false)
-    }
+  const dismissBanner = () => {
+    sessionStorage.setItem("banner_dismissed", "true");
+    setBannerVisible(false);
+  };
 
   return (
-    <div>
-        {bannerVisible && (
-            <div className="bg-linear-to-r from-app-green via-emerald to-app-green/80 text-white text-xs sm:text-sm relative overflow-hidden">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2 flex-center gap-6">
-                <div>
-                    <TruckIcon className="size-4 shrink-0"/>
-                    <span>Free delivery on orders above 30$</span>
-                </div>
-            <span className="hidden sm:inline text-white/40"></span>
-            <div className="hidden sm:flex items-center gap-2">
-                <ZapIcon className="size-3.5 fill-yellow-400 shrink-0"/>
-                <span>Fast and reliable shipping</span>
+    <>
+      {bannerVisible && (
+        <div className="relative overflow-hidden bg-linear-to-r from-app-green via-emerald to-app-green/80 text-white text-xs sm:text-sm">
+          <div className="mx-auto flex max-w-7xl items-center justify-center gap-6 px-4 py-2 sm:px-6 lg:px-8">
+            {/* Free Delivery */}
+            <div className="flex items-center gap-2">
+              <TruckIcon className="size-4 shrink-0" />
+              <span>Free delivery on orders above $30</span>
             </div>
-              </div>
-              <button
-                onClick={dismissBanner}
-                aria-label="Dismiss banner"
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/10 rounded-full"
-              >
-                <XIcon className="size-3.5"/>
-              </button>
+
+            {/* Divider */}
+            <span className="hidden text-white/40 sm:inline">|</span>
+
+            {/* Fast Shipping */}
+            <div className="hidden items-center gap-2 sm:flex">
+              <ZapIcon className="size-3.5 shrink-0 fill-yellow-400" />
+              <span>Fast and reliable shipping</span>
             </div>
-        )}
-    </div>
-  )
-}
+          </div>
+
+          <button
+            onClick={dismissBanner}
+            aria-label="Dismiss banner"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 transition-colors hover:bg-white/10"
+          >
+            <XIcon className="size-3.5" />
+          </button>
+        </div>
+      )}
+    </>
+  );
+};
 
 export default Banner;
