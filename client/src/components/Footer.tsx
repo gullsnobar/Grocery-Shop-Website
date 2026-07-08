@@ -33,7 +33,7 @@ const Footer = () => {
          <ul className="space-y-2">
             {section.links.map((link, j) => (
                <li key={j}>
-                 <Link to={link.to} className="text-sm text-white/70 hover:text-white">
+                 <Link to={link.to ?? "#"} className="text-sm text-white/70 hover:text-white">
                     {link.label}
                  </Link>
                </li>
@@ -48,7 +48,7 @@ const Footer = () => {
                 <ul className="space-y-3">
                    <li className="flex items-start gap-2 text-sm text-white/70">
                       <MapPinIcon className="size-4 mt-0.5 shrink-0" />
-                      <span>123 Green Valley Rd, Portland</span>
+                      <span>123 Green Valley Rd, Lahore</span>
                    </li>
                    <li className="flex items-center gap-2 text-sm text-white/70">
                       <PhoneIcon className="size-4 shrink-0" />
@@ -64,7 +64,7 @@ const Footer = () => {
              </div>
              {/* Bottom Part of footer */}
              <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-white/60">
-                <p>© 2026 Greatstack. All rights reserved.</p>
+                <p>© 2026 GullSnobar. All rights reserved.</p>
                 <div className="flex items-center gap-6">
                    <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
                    <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
