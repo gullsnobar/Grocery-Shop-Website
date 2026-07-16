@@ -3,7 +3,7 @@ import type { CartItem, Product } from "../types";
 
 interface CartContextType {
   items: CartItem[];
-  addToCart: (product: Product, quantity: number) => void;
+  addToCart: (product: Product, quantity?: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
@@ -27,7 +27,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     localStorage.setItem("app_cart", JSON.stringify(items));
   }, [items]);
 
-  const addToCart = (product: Product, quantity: number) => {
+  const addToCart = (product: Product, quantity: number = 1) => {
     setItems((prevItems) => {
       const existingItem = prevItems.find(
         (item) => item.product._id === product._id
