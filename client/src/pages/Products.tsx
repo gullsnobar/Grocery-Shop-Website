@@ -140,7 +140,7 @@ const mockProducts: Product[] = [
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
-  const [totalPages, setTotalPages] = useState(1);
+  // pagination state not used in UI (header shows count)
   const [loading, setLoading] = useState(true);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
 
@@ -187,12 +187,10 @@ const Products = () => {
       }
 
       const pageSize = 4;
-      const total = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
       const start = (currentPage - 1) * pageSize;
       const pagedProducts = filteredProducts.slice(start, start + pageSize);
 
       setProducts(pagedProducts);
-      setTotalPages(total);
       setLoading(false);
     };
 
@@ -221,21 +219,12 @@ const Products = () => {
     setMobileFiltersOpen(false);
   };
 
-  const changePage = (nextPage: number) => {
-    if (nextPage < 1 || nextPage > totalPages) {
-      return;
-    }
-
-    updateFilter("page", String(nextPage));
-  };
+  // pagination handled via URL 'page' param when needed; no client pager UI
 
   return (
     <div className="min-h-screen bg-zinc-50 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
         <ProductsHeader
-          productsCount={products.length}
-          mobileFiltersOpen={mobileFiltersOpen}
-          setMobileFiltersOpen={setMobileFiltersOpen}
           sort={sort}
           updateFilter={updateFilter}
         />
@@ -252,10 +241,6 @@ const Products = () => {
           />
 
           <section className="space-y-4">
-            <div className="flex flex-col gap-3 rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-zinc-600">Showing {products.length} product{products.length === 1 ? "" : "s"}</p>
-              <div className="text-sm text-zinc-500">Page {currentPage} of {totalPages}</div>
-            </div>
 
             {loading ? (
               <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-600 shadow-sm">Loading products...</div>
@@ -265,7 +250,7 @@ const Products = () => {
               <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-600 shadow-sm">No products matched your filters.</div>
             )}
 
-            <Pagination currentPage={currentPage} totalPages={totalPages} changePage={changePage} />
+            <Pagination />
           </section>
         </div>
       </div>
