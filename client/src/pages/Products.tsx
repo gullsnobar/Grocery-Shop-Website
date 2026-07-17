@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { FilterIcon, SlidersHorizontalIcon, XIcon } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
-import ProductCard from "../components/ProductCard";
+import ProductsHeader from "../components/Products/ProductsHeader";
+import FilterSidebar from "../components/Products/FilterSidebar";
+import ProductsGrid from "../components/Products/ProductsGrid";
+import Pagination from "../components/Products/Pagination";
 import type { Product } from "../types";
 
 const mockProducts: Product[] = [
@@ -230,143 +232,40 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-zinc-50 px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <div className="flex flex-col gap-3 rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold text-zinc-900">All Products</h1>
-            <p className="text-sm text-zinc-600">Browse fresh groceries with smart filters and sorting.</p>
-          </div>
-
-          <button
-            className="flex items-center justify-center gap-2 rounded-full border border-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 md:hidden"
-            onClick={() => setMobileFiltersOpen((prev) => !prev)}
-          >
-            {mobileFiltersOpen ? <XIcon className="size-4" /> : <SlidersHorizontalIcon className="size-4" />}
-            Filters
-          </button>
-        </div>
+        <ProductsHeader
+          productsCount={products.length}
+          mobileFiltersOpen={mobileFiltersOpen}
+          setMobileFiltersOpen={setMobileFiltersOpen}
+          sort={sort}
+          updateFilter={updateFilter}
+        />
 
         <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)]">
-          <aside className={`rounded-3xl border border-zinc-200 bg-white p-5 shadow-sm ${mobileFiltersOpen ? "block" : "hidden md:block"}`}>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <FilterIcon className="size-4 text-app-orange" />
-                <h2 className="font-semibold text-zinc-900">Filters</h2>
-              </div>
-              <button className="text-sm text-app-orange" onClick={clearFilters}>
-                Clear
-              </button>
-            </div>
-
-            <div className="mt-5 space-y-4">
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Category</label>
-                <select
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none"
-                  value={category}
-                  onChange={(event) => updateFilter("category", event.target.value)}
-                >
-                  <option value="">All categories</option>
-                  <option value="Fruits">Fruits</option>
-                  <option value="Vegetables">Vegetables</option>
-                  <option value="Dairy">Dairy</option>
-                  <option value="Pantry">Pantry</option>
-                  <option value="Meat">Meat</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Organic only</label>
-                <select
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none"
-                  value={organic}
-                  onChange={(event) => updateFilter("organic", event.target.value)}
-                >
-                  <option value="">Any</option>
-                  <option value="true">Yes</option>
-                  <option value="false">No</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-zinc-700">Sort by</label>
-                <select
-                  className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none"
-                  value={sort}
-                  onChange={(event) => updateFilter("sort", event.target.value)}
-                >
-                  <option value="">Recommended</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="name">Name</option>
-                </select>
-              </div>
-
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-zinc-700">Min price</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none"
-                    value={minPrice}
-                    onChange={(event) => updateFilter("minPrice", event.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-zinc-700">Max price</label>
-                  <input
-                    type="number"
-                    min="0"
-                    className="w-full rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm outline-none"
-                    value={maxPrice}
-                    onChange={(event) => updateFilter("maxPrice", event.target.value)}
-                  />
-                </div>
-              </div>
-            </div>
-          </aside>
+          <FilterSidebar
+            category={category}
+            organic={organic}
+            minPrice={minPrice}
+            maxPrice={maxPrice}
+            updateFilter={updateFilter}
+            clearFilters={clearFilters}
+            mobileFiltersOpen={mobileFiltersOpen}
+          />
 
           <section className="space-y-4">
             <div className="flex flex-col gap-3 rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-zinc-600">
-                Showing {products.length} product{products.length === 1 ? "" : "s"}
-              </p>
+              <p className="text-sm text-zinc-600">Showing {products.length} product{products.length === 1 ? "" : "s"}</p>
               <div className="text-sm text-zinc-500">Page {currentPage} of {totalPages}</div>
             </div>
 
             {loading ? (
-              <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-600 shadow-sm">
-                Loading products...
-              </div>
+              <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-600 shadow-sm">Loading products...</div>
             ) : products.length > 0 ? (
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {products.map((product) => (
-                  <ProductCard key={product._id} product={product} />
-                ))}
-              </div>
+              <ProductsGrid products={products} />
             ) : (
-              <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-600 shadow-sm">
-                No products matched your filters.
-              </div>
+              <div className="rounded-3xl border border-zinc-200 bg-white p-10 text-center text-sm text-zinc-600 shadow-sm">No products matched your filters.</div>
             )}
 
-            <div className="flex items-center justify-center gap-2 rounded-3xl border border-zinc-200 bg-white p-4 shadow-sm">
-              <button
-                className="rounded-full border border-zinc-200 px-3 py-1.5 text-sm text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50"
-                onClick={() => changePage(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <span className="text-sm font-medium text-zinc-700">{currentPage}</span>
-              <button
-                className="rounded-full border border-zinc-200 px-3 py-1.5 text-sm text-zinc-600 disabled:cursor-not-allowed disabled:opacity-50"
-                onClick={() => changePage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-            </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} changePage={changePage} />
           </section>
         </div>
       </div>
